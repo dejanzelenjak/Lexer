@@ -1,0 +1,49 @@
+#include <string.h>
+
+typedef enum
+{
+    TOKEN_NONE = 0,
+    KEYWORD_INT,
+    KEYWORD_FLOAT,
+    KEYWORD_RETURN,
+    KEYCHAR_ADDITION,
+    KEYCHAR_SUBSTRACTION,
+    KEYCHAR_DIVISION,
+    KEYCHAR_MULTIPLICATION,
+    KEYCHAR_SEMICOLON,
+    KEYCHAR_START_PARANTHESIS,
+    KEYCHAR_STOP_PARANTHESIS,
+    KEYCHAR_START_SCOPE,
+    KEYCHAR_STOP_SCOPE,
+    KEYCHAR_COMMA,
+    KEYCHAR_ASSIGNMENT,
+    TOKEN_EOF,
+    TOKEN_ERROR,
+    TOKEN_IDENTIFIER,
+    TOKEN_INT_LITERAL,
+    TOKEN_FLOAT_LITERAL,
+    ENUMERATION_SIZE
+}TOKEN_TYPE;
+
+#define TOKEN_KEYCHAR_ADDITION '+'
+#define TOKEN_KEYCHAR_SUBSTRACTION '-'
+#define TOKEN_KEYCHAR_DIVISION '/'
+#define TOKEN_KEYCHAR_MULTIPLICATION '*'
+#define TOKEN_KEYCHAR_SEMICOLON ';'
+#define TOKEN_KEYCHAR_START_PARANTHESIS '('
+#define TOKEN_KEYCHAR_STOP_PARANTHESIS ')'
+#define TOKEN_KEYCHAR_START_SCOPE '{'
+#define TOKEN_KEYCHAR_STOP_SCOPE '}'
+#define TOKEN_KEYCHAR_COMMA ','
+#define TOKEN_KEYCHAR_ASSIGNMENT '='
+
+typedef struct
+{
+    TOKEN_TYPE type;
+    char *start;
+    int length;
+}Token;
+
+TOKEN_TYPE parse_str_into_token(char const* element, int len);
+TOKEN_TYPE parse_keychar(const char keychar);
+TOKEN_TYPE parse_keyword(char const* keyword);
