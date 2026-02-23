@@ -44,6 +44,5 @@ typedef struct
     int length;
 }Token;
 
-TOKEN_TYPE parse_str_into_token(char const* element, int len);
 TOKEN_TYPE parse_keychar(const char keychar);
 TOKEN_TYPE parse_keyword(char const* keyword);

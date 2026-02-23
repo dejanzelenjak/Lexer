@@ -29,6 +29,9 @@ TOKEN_TYPE parse_keychar(const char keychar)
         case TOKEN_KEYCHAR_START_SCOPE:
             result = KEYCHAR_START_SCOPE;
             break;
+        case TOKEN_KEYCHAR_STOP_SCOPE:
+            result = KEYCHAR_STOP_SCOPE;
+            break;
         case TOKEN_KEYCHAR_COMMA:
             result = KEYCHAR_COMMA;
             break;

@@ -34,8 +34,8 @@ Token next_token(Lexer *lexer)
 
         int length = lexer->index - lexer->start;
         char buf[256];
-        buf[255] = '\0';
         memcpy(buf, lexer->input + lexer->start, length);
+        buf[255] = '\0';
         
         TOKEN_TYPE type = parse_keyword(buf);
         if(type == TOKEN_NONE)
@@ -69,8 +69,11 @@ Token next_token(Lexer *lexer)
 // Helpers
 void skip_whitespace(Lexer* lexer)
 {
-    while(lexer->input[lexer->index] == ' ')
-        lexer->index++;
+    while(isspace(lexer->input[lexer->index]) ||
+          lexer->input[lexer->index] == '\t'  ||
+          lexer->input[lexer->index] == '\n'  ||
+          lexer->input[lexer->index] == '\r')
+        advance(lexer);
 }
 
 char advance(Lexer* lexer)
