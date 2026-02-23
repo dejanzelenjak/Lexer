@@ -1,22 +1,5 @@
 #include <Tokenizer.h>
 
-TOKEN_TYPE parse_str_into_token(char const* element, int len)
-{
-    TOKEN_TYPE result_token = TOKEN_NONE;
-
-    if(len > 1)
-    {
-        result_token = parse_keyword(element);
-    }
-    else
-    {
-        char single_element = element[0];
-        result_token = parse_keychar(single_element);
-    }
-
-    return result_token;
-}
-
 TOKEN_TYPE parse_keychar(const char keychar)
 {
     TOKEN_TYPE result = TOKEN_NONE;
@@ -49,7 +32,7 @@ TOKEN_TYPE parse_keychar(const char keychar)
         case TOKEN_KEYCHAR_COMMA:
             result = KEYCHAR_COMMA;
             break;
-        case KEYCHAR_ASSIGNMENT:
+        case TOKEN_KEYCHAR_ASSIGNMENT:
             result = KEYCHAR_ASSIGNMENT;
             break;
     }

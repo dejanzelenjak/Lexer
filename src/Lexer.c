@@ -1,5 +1,9 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
+#include <ctype.h>
 #include <Lexer.h>
-#include <Tokenizer.h>
 
 static void skip_whitespace(Lexer* lexer);
 static char advance(Lexer* lexer);
@@ -30,9 +34,10 @@ Token next_token(Lexer *lexer)
 
         int length = lexer->index - lexer->start;
         char buf[256];
+        buf[255] = '\0';
         memcpy(buf, lexer->input + lexer->start, length);
         
-        TOKEN_TYPE type = parse_str_into_token(buf, length);
+        TOKEN_TYPE type = parse_keyword(buf);
         if(type == TOKEN_NONE)
             type = TOKEN_IDENTIFIER;
 
@@ -56,13 +61,15 @@ Token next_token(Lexer *lexer)
         return make_token(lexer, type);
     }
 
+    // If no alpha/digit char is detected, advance lexer and check for keychar
+    advance(lexer);
     return make_token(lexer, parse_keychar(c));
 }
 
 // Helpers
 void skip_whitespace(Lexer* lexer)
 {
-    if(lexer->input[lexer->index] == ' ')
+    while(lexer->input[lexer->index] == ' ')
         lexer->index++;
 }
 
@@ -70,7 +77,10 @@ char advance(Lexer* lexer)
 {
     lexer->column++;
     if(lexer->input[lexer->index] == '\n')
+    {
         lexer->line++;
+        lexer->column = 0;
+    }
     return lexer->input[lexer->index++];
 }
 
