@@ -1,3 +1,6 @@
+#ifndef TOKENIZER_H
+#define TOKENIZER_H
+
 #include <string.h>
 
 typedef enum
@@ -46,3 +49,6 @@ typedef struct
 
 TOKEN_TYPE parse_keychar(const char keychar);
 TOKEN_TYPE parse_keyword(char const* keyword);
+const char* token_type_to_string(TOKEN_TYPE type);
+
+#endif /* TOKENIZER_H */

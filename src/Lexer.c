@@ -5,7 +5,7 @@
 #include <ctype.h>
 #include <Lexer.h>
 
-static void skip_whitespace(Lexer* lexer);
+static bool skip_whitespace(Lexer* lexer);
 static char advance(Lexer* lexer);
 static char peek(Lexer* lexer);
 static bool at_end(Lexer* lexer);
@@ -13,15 +13,47 @@ static Token make_token(Lexer* lexer, TOKEN_TYPE type);
 
 int main()
 {
-    printf("Hello World\n");
-    fflush(stdout);
+    Lexer myLexer;
+    char input[256];
+    
+    (void)fgets(input, sizeof(input), stdin);
+    // Cut input buffer
+    input[255] = '\0';
+
+    // Init lexer struct
+    myLexer.input = malloc(sizeof(char) * 256);
+    myLexer.index  = 0;
+    myLexer.start  = 0;
+    myLexer.end    = strlen(input);
+    myLexer.line   = 0;
+    myLexer.column = 0;
+
+    // Get input buffer into lexer
+    memcpy(myLexer.input, input, sizeof(input));
+
+    // Initialize tokens
+    Token token;
+    token.length = 0;
+    token.start = 0;
+    token.type = ENUMERATION_SIZE;
+
+    // Call lexer in loop until EOF
+    do
+    {
+        token = next_token(&myLexer);
+        printf("%s ", token_type_to_string(token.type));
+    }
+    while(token.type != TOKEN_EOF);
+
+    return 0;
 }
 
 Token next_token(Lexer *lexer)
 {
-    skip_whitespace(lexer);
-
     if(at_end(lexer))
+        return make_token(lexer, TOKEN_EOF);
+
+    if(skip_whitespace(lexer))
         return make_token(lexer, TOKEN_EOF);
 
     lexer->start = lexer->index;
@@ -35,7 +67,7 @@ Token next_token(Lexer *lexer)
         int length = lexer->index - lexer->start;
         char buf[256];
         memcpy(buf, lexer->input + lexer->start, length);
-        buf[255] = '\0';
+        buf[length] = '\0';
         
         TOKEN_TYPE type = parse_keyword(buf);
         if(type == TOKEN_NONE)
@@ -67,13 +99,16 @@ Token next_token(Lexer *lexer)
 }
 
 // Helpers
-void skip_whitespace(Lexer* lexer)
+bool skip_whitespace(Lexer* lexer)
 {
-    while(isspace(lexer->input[lexer->index]) ||
-          lexer->input[lexer->index] == '\t'  ||
-          lexer->input[lexer->index] == '\n'  ||
-          lexer->input[lexer->index] == '\r')
-        advance(lexer);
+    if(!at_end(lexer))
+    {
+        while(isspace(lexer->input[lexer->index]))
+            advance(lexer);
+        return at_end(lexer);
+    }
+
+    return false;
 }
 
 char advance(Lexer* lexer)
